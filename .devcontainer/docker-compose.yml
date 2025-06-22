@@ -1,25 +1,16 @@
 version: '3.9'
 
-x-common-env: &common-env
-  TZ: UTC
-  PROJECT_NAME: AETHER
-  ENVIRONMENT: development
-
 services:
   aether-dev:
     build:
       context: .
       dockerfile: Dockerfile
-      args:
-        - PYTHON_VERSION=3.11
-        - NODE_VERSION=20
     volumes:
-      - ..:/workspace/aether:cached
+      - ..:/workspace:cached
       - /var/run/docker.sock:/var/run/docker.sock
     environment:
-      <<: *common-env
       DATABASE_URL: postgresql://aether:aether123@postgres:5432/aether_trading
-      REDIS_URL: redis://default:redis123@redis:6379/0
+      REDIS_URL: redis://redis:6379/0
     command: sleep infinity
     networks:
       - aether-network
@@ -50,13 +41,10 @@ services:
       - "6379:6379"
     networks:
       - aether-network
-    command: redis-server --requirepass redis123
 
 volumes:
   postgres-data:
   redis-data:
-  aether-vscode-extensions:
-  aether-cache:
 
 networks:
   aether-network:
