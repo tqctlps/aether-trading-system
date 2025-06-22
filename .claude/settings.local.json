@@ -7,7 +7,15 @@
       "Bash(docker:*)",
       "Bash(chmod:*)",
       "Bash(redis-cli:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(gh repo create:*)",
+      "Bash(brew install:*)",
+      "Bash(gh auth:*)",
+      "Bash(git branch:*)",
+      "Bash(git remote add:*)",
+      "Bash(git push:*)",
+      "Bash(find:*)"
     ],
     "deny": []
   }

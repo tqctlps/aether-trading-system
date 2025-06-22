@@ -8,7 +8,7 @@ run:
 	python -m src.main
 
 test:
-	pytest -v
+	python -m pytest -v
 
 format:
 	black src tests
