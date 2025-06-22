@@ -1,0 +1,63 @@
+version: '3.9'
+
+x-common-env: &common-env
+  TZ: UTC
+  PROJECT_NAME: AETHER
+  ENVIRONMENT: development
+
+services:
+  aether-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - PYTHON_VERSION=3.11
+        - NODE_VERSION=20
+    volumes:
+      - ..:/workspace/aether:cached
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      <<: *common-env
+      DATABASE_URL: postgresql://aether:aether123@postgres:5432/aether_trading
+      REDIS_URL: redis://default:redis123@redis:6379/0
+    command: sleep infinity
+    networks:
+      - aether-network
+    depends_on:
+      - postgres
+      - redis
+
+  postgres:
+    image: postgres:15-alpine
+    restart: unless-stopped
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: aether
+      POSTGRES_PASSWORD: aether123
+      POSTGRES_DB: aether_trading
+    ports:
+      - "5432:5432"
+    networks:
+      - aether-network
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    volumes:
+      - redis-data:/data
+    ports:
+      - "6379:6379"
+    networks:
+      - aether-network
+    command: redis-server --requirepass redis123
+
+volumes:
+  postgres-data:
+  redis-data:
+  aether-vscode-extensions:
+  aether-cache:
+
+networks:
+  aether-network:
+    driver: bridge

@@ -1,0 +1,116 @@
+{
+  "name": "AETHER - Claude Meta-AI Trading System",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "aether-dev",
+  "workspaceFolder": "/workspace/aether",
+  
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "python.defaultInterpreterPath": "/usr/local/bin/python",
+        "python.linting.enabled": true,
+        "python.linting.pylintEnabled": true,
+        "python.linting.flake8Enabled": true,
+        "python.formatting.provider": "black",
+        "python.formatting.blackPath": "/usr/local/bin/black",
+        "python.sortImports.path": "/usr/local/bin/isort",
+        "python.testing.pytestEnabled": true,
+        "python.testing.pytestPath": "/usr/local/bin/pytest",
+        "python.envFile": "${workspaceFolder}/.env",
+        "jupyter.jupyterServerType": "local",
+        "jupyter.notebookFileRoot": "${workspaceFolder}/notebooks",
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+          "source.organizeImports": true,
+          "source.fixAll": true
+        },
+        "files.associations": {
+          "*.env*": "dotenv"
+        },
+        "terminal.integrated.defaultProfile.linux": "zsh",
+        "git.autofetch": true,
+        "git.confirmSync": false,
+        "remote.autoForwardPorts": true
+      },
+      
+      "extensions": [
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "ms-python.debugpy",
+        "ms-toolsai.jupyter",
+        "ms-toolsai.jupyter-keymap",
+        "ms-toolsai.jupyter-renderers",
+        "njpwerner.autodocstring",
+        "github.copilot",
+        "github.copilot-chat",
+        "ms-azuretools.vscode-docker",
+        "ms-vscode-remote.remote-containers",
+        "mtxr.sqltools",
+        "mtxr.sqltools-driver-pg",
+        "redis.redis-for-vscode",
+        "streetsidesoftware.code-spell-checker",
+        "usernamehw.errorlens",
+        "yzhang.markdown-all-in-one",
+        "bierner.markdown-mermaid",
+        "eamodio.gitlens",
+        "humao.rest-client",
+        "gruntfuggly.todo-tree",
+        "christian-kohler.path-intellisense",
+        "aaron-bond.better-comments",
+        "mikestead.dotenv",
+        "redhat.vscode-yaml"
+      ]
+    }
+  },
+  
+  "features": {
+    "ghcr.io/devcontainers/features/github-cli:1": {},
+    "ghcr.io/devcontainers/features/sshd:1": {},
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "20"
+    },
+    "ghcr.io/devcontainers-contrib/features/zsh-plugins:0": {
+      "plugins": "git docker docker-compose python pip npm",
+      "omzPlugins": "https://github.com/zsh-users/zsh-autosuggestions https://github.com/zsh-users/zsh-syntax-highlighting",
+      "username": "vscode"
+    }
+  },
+  
+  "forwardPorts": [8000, 8001, 8080, 8888, 5432, 5433, 6379, 3000, 9090, 5000],
+  
+  "portsAttributes": {
+    "8000": {
+      "label": "AETHER API",
+      "onAutoForward": "notify"
+    },
+    "8888": {
+      "label": "Jupyter Lab",
+      "onAutoForward": "openBrowser"
+    },
+    "3000": {
+      "label": "Grafana Dashboard",
+      "onAutoForward": "openBrowser"
+    }
+  },
+  
+  "postCreateCommand": "bash /workspace/aether/scripts/post-create.sh",
+  "postStartCommand": "bash /workspace/aether/scripts/post-start.sh",
+  
+  "remoteUser": "vscode",
+  "containerUser": "vscode",
+  
+  "mounts": [
+    "source=aether-vscode-extensions,target=/home/vscode/.vscode-server/extensions,type=volume",
+    "source=aether-cache,target=/home/vscode/.cache,type=volume"
+  ],
+  
+  "runArgs": [
+    "--shm-size=16g"
+  ],
+  
+  "containerEnv": {
+    "PYTHONPATH": "/workspace/aether/src:${PYTHONPATH}",
+    "PROJECT_NAME": "AETHER",
+    "ENVIRONMENT": "development"
+  }
+}
